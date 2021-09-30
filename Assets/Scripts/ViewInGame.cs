@@ -7,6 +7,7 @@ public class ViewInGame : MonoBehaviour
 {
     public static ViewInGame Instance;
     public Text text_rescued;
+    public int countEndangered = 0;
 
     private void Awake()
     {
@@ -25,6 +26,6 @@ public class ViewInGame : MonoBehaviour
 
     public void LoadGUI()
     {
-        text_rescued.text = "0/" + CageController.Instance.countEndangered.ToString();
+        text_rescued.text = countEndangered.ToString() + "/" + CageController.Instance.countEndangered.ToString();
     }
 }

@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class EnemyFollow : MonoBehaviour
 {
     public Transform Player;
-    int MoveSpeed = 1;
-    int MaxDist = 2;
+    int MoveSpeed = 6;
+    int MaxDist = 1;
     int MinDist = 1;
 
     float yaw = 0.0f;

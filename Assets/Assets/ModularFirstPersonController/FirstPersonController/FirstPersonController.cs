@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -125,6 +126,8 @@ public class FirstPersonController : MonoBehaviour
     private float timer = 0;
 
     #endregion
+
+    private bool isPolice = false;
 
     private void Awake()
     {
@@ -358,6 +361,28 @@ public class FirstPersonController : MonoBehaviour
             HeadBob();
         }
 
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            if (GameManager.Instance.currentGameState == GameState.check)
+            {
+                transform.position = new Vector3(32.29f, 1.0f, 8.55f);
+            }
+            else if (GameManager.Instance.currentGameState == GameState.information)
+            {
+                isPolice = false;
+                ViewInGame.Instance.countEndangered++;
+                ViewInGame.Instance.LoadGUI();
+
+                int index = int.Parse(objTemp.GetComponentInChildren<Text>().text);
+
+                AnimalsData.Instance.animals[index].isEndangered = false;
+
+                objTemp.GetComponentInChildren<TMP_Text>().text = "";
+                objTemp.GetComponentInChildren<SpriteRenderer>().sprite = null;
+            }
+            GameManager.Instance.SetGameState(GameState.inGame);
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             int layerMask = 1 << 0;
@@ -376,7 +401,15 @@ public class FirstPersonController : MonoBehaviour
                 {
                     int index = int.Parse(objTemp.GetComponentInChildren<Text>().text);
                     Debug.Log("Index: " + index);
-                    Debug.Log("Peligro de extinción: " + AnimalsData.Instance.animals[index].isEndangered);
+
+                    if(AnimalsData.Instance.animals[index].isEndangered)
+                    {
+                        isPolice = true;
+                        GameManager.Instance.index = index;
+                        GameManager.Instance.SetGameState(GameState.check);
+
+                    }
+                    
 
                 }
 
@@ -559,9 +592,11 @@ public class FirstPersonController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Police"))
+        if(other.CompareTag("Police") && isPolice)
         {
-            Debug.Log("Ganaste");
+            int index = GameManager.Instance.index;
+            ViewInInformation.Instance.LoadInformation(AnimalsData.Instance.animals[index].name, AnimalsData.Instance.animals[index].description);
+            GameManager.Instance.SetGameState(GameState.information);
         }
     }
 }

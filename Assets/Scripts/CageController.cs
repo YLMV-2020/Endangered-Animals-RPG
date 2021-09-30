@@ -48,7 +48,6 @@ public class CageController : MonoBehaviour
         }
 
         ViewInGame.Instance.LoadGUI();
-        Debug.Log("Peligro count: " + countEndangered);
 
     }
 

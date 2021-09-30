@@ -5,20 +5,22 @@ using UnityEngine.SceneManagement;
 
 public enum GameState
 {
-    menu,
-    points,
+    check,
+    information,
     inGame,
     gameOver
 }
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager sharedInstance;
-    public GameState currentGameState = GameState.menu;
+    public static GameManager Instance;
+    public GameState currentGameState = GameState.check;
 
-    [SerializeField] Canvas menuCanvas = null;
-    [SerializeField] Canvas gameCanvas = null;
+    [SerializeField] Canvas informationCanvas = null;
+    [SerializeField] Canvas checkCanvas = null;
     [SerializeField] Canvas gameOverCanvas = null;
+
+    public int index = 0;
 
     private int collectedAnimals = 0;
     private int collectedPoints = 0;
@@ -28,17 +30,12 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        sharedInstance = this;
+        Instance = this;
     }
 
     void Start()
     {
-        //BackToMenu();
-    }
-
-    void Update()
-    {
-
+        SetGameState(GameState.inGame);
     }
 
     public void StartGame()
@@ -51,15 +48,6 @@ public class GameManager : MonoBehaviour
         this.CollectedPoints = 0;
     }
 
-    public void GameOver()
-    {
-        SetGameState(GameState.gameOver);
-    }
-
-    public void BackToMenu()
-    {
-        SetGameState(GameState.menu);
-    }
 
     public void ExitGame()
     {
@@ -72,23 +60,29 @@ public class GameManager : MonoBehaviour
 
     public void SetGameState(GameState newGameState)
     {
-        if (newGameState == GameState.menu)
+        if (newGameState == GameState.information)
         {
-            menuCanvas.enabled = true;
-            gameCanvas.enabled = false;
+            informationCanvas.enabled = true;
+            checkCanvas.enabled = false;
             gameOverCanvas.enabled = false;
         }
         else if (newGameState == GameState.inGame)
         {
-            menuCanvas.enabled = false;
-            gameCanvas.enabled = true;
+            informationCanvas.enabled = false;
+            checkCanvas.enabled = false;
             gameOverCanvas.enabled = false;
         }
         else if (newGameState == GameState.gameOver)
         {
-            menuCanvas.enabled = false;
-            gameCanvas.enabled = false;
+            informationCanvas.enabled = false;
+            checkCanvas.enabled = false;
             gameOverCanvas.enabled = true;
+        }
+        else if (newGameState == GameState.check)
+        {
+            informationCanvas.enabled = false;
+            checkCanvas.enabled = true;
+            gameOverCanvas.enabled = false;
         }
 
         this.currentGameState = newGameState;

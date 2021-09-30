@@ -19,6 +19,12 @@ public class PlayerController: MonoBehaviour
     void Start()
     {
         //scriptPersonController = GetComponent<FirstPersonController>();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Disparo");
+        }
+
     }
 
     void Update()

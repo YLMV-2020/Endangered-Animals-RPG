@@ -1,9 +1,4 @@
-﻿// CHANGE LOG
-// 
-// CHANGES || version VERSION
-//
-// "Enable/Disable Headbob, Changed look rotations - should result in reduced camera jitters" || version 1.0.1
-
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -375,11 +370,15 @@ public class FirstPersonController : MonoBehaviour
             {
                 //Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.green);
 
-
                 this.objTemp = hit.transform.gameObject;
 
-                Debug.Log(objTemp.name);
+                if(objTemp.CompareTag("Cage"))
+                {
+                    int index = int.Parse(objTemp.GetComponentInChildren<Text>().text);
+                    Debug.Log("Index: " + index);
+                    Debug.Log("Peligro de extinción: " + AnimalsData.Instance.animals[index].isEndangered);
 
+                }
 
                 //PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
 
@@ -390,9 +389,6 @@ public class FirstPersonController : MonoBehaviour
                 //clickHandler.OnPointerClick(pointerEventData);
                 //enterHandler.OnPointerEnter(pointerEventData);
                 //exitHandler.OnPointerExit(pointerEventData);
-
-
-
             }
         }
     }
@@ -558,6 +554,14 @@ public class FirstPersonController : MonoBehaviour
             // Resets when play stops moving
             timer = 0;
             joint.localPosition = new Vector3(Mathf.Lerp(joint.localPosition.x, jointOriginalPos.x, Time.deltaTime * bobSpeed), Mathf.Lerp(joint.localPosition.y, jointOriginalPos.y, Time.deltaTime * bobSpeed), Mathf.Lerp(joint.localPosition.z, jointOriginalPos.z, Time.deltaTime * bobSpeed));
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Police"))
+        {
+            Debug.Log("Ganaste");
         }
     }
 }

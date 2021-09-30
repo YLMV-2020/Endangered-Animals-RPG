@@ -20,10 +20,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] Canvas gameCanvas = null;
     [SerializeField] Canvas gameOverCanvas = null;
 
-    private int collectedMoney = 0;
+    private int collectedAnimals = 0;
     private int collectedPoints = 0;
 
-    public int CollectedMoney { get => collectedMoney; set => collectedMoney = value; }
+    public int CollectedAnimals { get => collectedAnimals; set => collectedAnimals = value; }
     public int CollectedPoints { get => collectedPoints; set => collectedPoints = value; }
 
     private void Awake()
@@ -45,9 +45,9 @@ public class GameManager : MonoBehaviour
     {
         //SetGameState(GameState.inGame);
 
-        SceneManager.LoadSceneAsync("City");
+        SceneManager.LoadScene("City");
         
-        this.CollectedMoney = 0;
+        this.CollectedAnimals = 0;
         this.CollectedPoints = 0;
     }
 
@@ -94,9 +94,9 @@ public class GameManager : MonoBehaviour
         this.currentGameState = newGameState;
     }
 
-    public void CollectMoney(int money)
+    public void CollectAnimals(int animals)
     {
-        this.CollectedMoney += money;
+        this.CollectedAnimals += animals;
     }
 
     public void CollectPoints(int points)

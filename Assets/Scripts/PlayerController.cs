@@ -18,22 +18,17 @@ public class PlayerController: MonoBehaviour
 
     void Start()
     {
-        //scriptPersonController = GetComponent<FirstPersonController>();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Disparo");
-        }
 
     }
 
     void Update()
     {
 
-        inputAxis = player.inputAxis;
+        //inputAxis = player.inputAxis;
 
-        animator.SetFloat("velocityX", inputAxis.x);
-        animator.SetFloat("velocityY", inputAxis.z);
+        //animator.SetFloat("velocityX", inputAxis.x);
+        //animator.SetFloat("velocityY", inputAxis.z);
 
     }
 

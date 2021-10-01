@@ -8,17 +8,21 @@ public enum GameState
     check,
     information,
     inGame,
+    win,
     gameOver
 }
 
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager Instance;
+
     public GameState currentGameState = GameState.check;
 
     [SerializeField] Canvas informationCanvas = null;
     [SerializeField] Canvas checkCanvas = null;
     [SerializeField] Canvas gameOverCanvas = null;
+    [SerializeField] Canvas winCanvas = null;
 
     public int index = 0;
 
@@ -65,24 +69,35 @@ public class GameManager : MonoBehaviour
             informationCanvas.enabled = true;
             checkCanvas.enabled = false;
             gameOverCanvas.enabled = false;
+            winCanvas.enabled = false;
         }
         else if (newGameState == GameState.inGame)
         {
             informationCanvas.enabled = false;
             checkCanvas.enabled = false;
             gameOverCanvas.enabled = false;
+            winCanvas.enabled = false;
         }
         else if (newGameState == GameState.gameOver)
         {
             informationCanvas.enabled = false;
             checkCanvas.enabled = false;
             gameOverCanvas.enabled = true;
+            winCanvas.enabled = false;
         }
         else if (newGameState == GameState.check)
         {
             informationCanvas.enabled = false;
             checkCanvas.enabled = true;
             gameOverCanvas.enabled = false;
+            winCanvas.enabled = false;
+        }
+        else if (newGameState == GameState.win)
+        {
+            informationCanvas.enabled = false;
+            checkCanvas.enabled = false;
+            gameOverCanvas.enabled = false;
+            winCanvas.enabled = true;
         }
 
         this.currentGameState = newGameState;

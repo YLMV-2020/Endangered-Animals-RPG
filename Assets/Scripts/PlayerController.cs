@@ -19,26 +19,20 @@ public class PlayerController: MonoBehaviour
     void Start()
     {
 
-
     }
 
     void Update()
     {
-
         //inputAxis = player.inputAxis;
 
         //animator.SetFloat("velocityX", inputAxis.x);
         //animator.SetFloat("velocityY", inputAxis.z);
-
     }
 
     private void FixedUpdate()
     {
         
     }
-
-    
-
 
     //void OnGUI()
     //{

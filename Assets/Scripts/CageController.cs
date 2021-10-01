@@ -59,4 +59,13 @@ public class CageController : MonoBehaviour
         return false;
     }
 
+    public int indexToId(int index)
+    {
+        for (int i = 0; i < random.Length; i++)
+        {
+            if (index == random[i]) return i;
+        }
+        return -1;
+    }
+
 }

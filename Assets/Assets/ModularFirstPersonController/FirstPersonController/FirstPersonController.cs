@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -361,26 +362,56 @@ public class FirstPersonController : MonoBehaviour
             HeadBob();
         }
 
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            if (GameManager.Instance.currentGameState == GameState.win
+                || GameManager.Instance.currentGameState == GameState.gameOver)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                SceneManager.LoadScene("Login");
+            }
+        }
+
+
         if(Input.GetKeyDown(KeyCode.P))
         {
             if (GameManager.Instance.currentGameState == GameState.check)
             {
-                transform.position = new Vector3(32.29f, 1.0f, 8.55f);
+                int index = GameManager.Instance.index;
+                int id = CageController.Instance.indexToId(index);
+                int active = EnemyController.Instance.indexShop(id);
+                EnemyController.Instance.enableEnemy(active);
+
+                transform.position = EnemyController.Instance.positionPlayer[active];
+                GameManager.Instance.SetGameState(GameState.inGame);
             }
             else if (GameManager.Instance.currentGameState == GameState.information)
             {
                 isPolice = false;
                 ViewInGame.Instance.countEndangered++;
-                ViewInGame.Instance.LoadGUI();
 
-                int index = int.Parse(objTemp.GetComponentInChildren<Text>().text);
+                //Debug.Log(ViewInGame.Instance.countEndangered + " - " + CageController.Instance.countEndangered);
 
-                AnimalsData.Instance.animals[index].isEndangered = false;
+                if(ViewInGame.Instance.countEndangered < CageController.Instance.countEndangered)
+                {
+                    ViewInGame.Instance.LoadGUI();
+                    int index = int.Parse(objTemp.GetComponentInChildren<Text>().text);
+                    
+                    AnimalsData.Instance.animals[index].isEndangered = false;
+                    objTemp.GetComponentInChildren<TMP_Text>().text = "";
+                    
+                    objTemp.GetComponentInChildren<SpriteRenderer>().sprite = null;
+                    GameManager.Instance.SetGameState(GameState.inGame);
+                }
+                else
+                {
+                    //Debug.Log("Has ganado");
+                    
+                    GameManager.Instance.SetGameState(GameState.win);
+                }
 
-                objTemp.GetComponentInChildren<TMP_Text>().text = "";
-                objTemp.GetComponentInChildren<SpriteRenderer>().sprite = null;
             }
-            GameManager.Instance.SetGameState(GameState.inGame);
+            
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -400,17 +431,13 @@ public class FirstPersonController : MonoBehaviour
                 if(objTemp.CompareTag("Cage"))
                 {
                     int index = int.Parse(objTemp.GetComponentInChildren<Text>().text);
-                    Debug.Log("Index: " + index);
 
                     if(AnimalsData.Instance.animals[index].isEndangered)
                     {
                         isPolice = true;
                         GameManager.Instance.index = index;
                         GameManager.Instance.SetGameState(GameState.check);
-
                     }
-                    
-
                 }
 
                 //PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
@@ -594,6 +621,7 @@ public class FirstPersonController : MonoBehaviour
     {
         if(other.CompareTag("Police") && isPolice)
         {
+            EnemyController.Instance.disableEnemies();
             int index = GameManager.Instance.index;
             ViewInInformation.Instance.LoadInformation(AnimalsData.Instance.animals[index].name, AnimalsData.Instance.animals[index].description);
             GameManager.Instance.SetGameState(GameState.information);
